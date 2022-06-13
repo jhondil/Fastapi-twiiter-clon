@@ -10,14 +10,6 @@ from models import *
 app = FastAPI()
 
 
-@app.get(
-    path="/",
-    
-)
-def home():
-    return{"Api": "Twitter"}
-
-
 #path operation 
 
 ##User
@@ -84,3 +76,57 @@ def update_a_user():
 
 
 ##Tweet
+
+
+@app.get(
+    path="/",
+    response_model=List[Tweet],
+     status_code=status.HTTP_200_OK,
+    summary="Show all Tweets"  ,
+    tags=["Tweet"]
+)
+def home():
+    return{"Api": "Twitter"}
+
+@app.post(
+    path="/post",
+    response_model=Tweet, ##responde al usuario
+    status_code=status.HTTP_201_CREATED,
+    summary="Post a Tweet"  ,
+    tags=["Tweet"]
+)
+def post():
+    pass
+
+@app.get(
+    path="/post/{tweet_id}",
+    response_model=Tweet, ##responde al usuario
+    status_code=status.HTTP_200_OK,
+    summary="Show a Tweet"  ,
+    tags=["Tweet"]
+)
+def show_a_tweet():
+    pass
+
+@app.delete(
+    path="/post/{tweet_id}/delete",
+    response_model=Tweet, ##responde al usuario
+    status_code=status.HTTP_200_OK,
+    summary="Delete a Tweet"  ,
+    tags=["Tweet"]
+)
+def delete_a_tweet():
+    pass
+
+@app.put(
+    path="/post/{tweet_id}/update",
+    response_model=Tweet, ##responde al usuario
+    status_code=status.HTTP_200_OK,
+    summary="Update a Tweet"  ,
+    tags=["Tweet"]
+)
+def update_a_tweet():
+    pass
+
+
+
