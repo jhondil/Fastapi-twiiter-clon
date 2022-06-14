@@ -95,12 +95,15 @@ def update_a_user():
 @app.get(
     path="/",
     response_model=List[Tweet],
-     status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_200_OK,
     summary="Show all Tweets"  ,
     tags=["Tweet"]
 )
 def home():
-    return{"Api": "Twitter"}
+     with open ("tweets.json", "r", encoding="utf-8") as f:
+        result = json.loads(f.read())
+        return result
+    
 
 @app.post(
     path="/post",
@@ -109,8 +112,19 @@ def home():
     summary="Post a Tweet"  ,
     tags=["Tweet"]
 )
-def post():
-    pass
+def post(tweet: Tweet = Body(...)):
+    with open("tweets.json", "r+", encoding="utf-8" ) as f:
+        result = json.loads(f.read())
+        tweet_dict = tweet.dict()
+        tweet_dict["tweet_id"]= str(tweet_dict["tweet_id"])
+        tweet_dict["created_at"] = str(tweet_dict["created_at"])
+        tweet_dict["update_at"] = str(tweet_dict["update_at"])     
+        tweet_dict["by"]["user_id"]= str(tweet_dict["by"]["user_id"])     
+        tweet_dict["by"]["birth_date"]= str(tweet_dict["by"]["birth_date"])     
+        result.append(tweet_dict)
+        f.seek(0)
+        f.write(json.dumps(result))
+        return tweet
 
 @app.get(
     path="/post/{tweet_id}",
