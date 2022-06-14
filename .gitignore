@@ -1,5 +1,8 @@
 .env/
 api-twitter.png
+tweets.json
+users.json
+.vscode/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
