@@ -1,6 +1,6 @@
 #python
 from typing import Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 from datetime import (date, datetime)
 
 #pydantic
@@ -10,19 +10,10 @@ from pydantic import (BaseModel, EmailStr, Field)
 #models User
 
 class UserBase(BaseModel):
-    user_id: UUID = Field(...)
+    user_id: UUID = Field(default_factory=uuid4)
     email: EmailStr  = Field(...)
 
-
-class UserLogin(UserBase):
-    password: str = Field(
-        ...,
-        min_length=8,
-        max_length=25
-    )
-
-
-class User(BaseModel):
+class User(UserBase):
    
     first_name: str = Field(
         ...,
@@ -36,8 +27,21 @@ class User(BaseModel):
         max_length=80,
         
     )
-    bird_date: Optional[date] = Field(default=None)
+    birth_date: Optional[date] = Field(default=None)
 
+class UserLogin(UserBase ):
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=25
+    )  
+
+class UserRegister(User):
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=25
+    )  
 
 #models Tweets
 class Tweet(BaseModel):

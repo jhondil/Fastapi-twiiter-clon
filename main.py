@@ -1,8 +1,10 @@
 #Python
+import json
 from typing import Optional, List
+from unittest import result
 
 #fastApi
-from fastapi import (FastAPI,status)
+from fastapi import (FastAPI,status, Body)
 
 #Models
 from models import *
@@ -21,9 +23,18 @@ app = FastAPI()
     summary="Register a Uses"  ,
     tags=["Users"]
 )
-def signup():
-    pass
-
+def signup(user: UserRegister = Body(...)):
+    with open("users.json", "r+", encoding="utf-8" ) as f:
+        result = json.loads(f.read())
+        user_dict = user.dict()
+        user_dict["user_id"]= str(user_dict["user_id"])
+        user_dict["birth_date"] = str(user_dict["birth_date"])
+        result.append(user_dict)
+        f.seek(0)
+        f.write(json.dumps(result))
+        return user
+    
+    
 @app.post(
     path="/login",
     response_model=User, ##responde al usuario
@@ -42,7 +53,10 @@ def login():
     tags=["Users"]
 )
 def show_all_user():
-    pass
+    with open ("users.json", "r", encoding="utf-8") as f:
+        result = json.loads(f.read())
+        return result
+        
 
 @app.get(
     path="/users/{user_id}",
