@@ -25,12 +25,14 @@ app = FastAPI()
 )
 def signup(user: UserRegister = Body(...)):
     with open("users.json", "r+", encoding="utf-8" ) as f:
-        result = json.loads(f.read())
-        user_dict = user.dict()
+        result = json.loads(f.read()) # lee el archivo y lo convierte en json json.loads()
+        user_dict = user.dict() #convierte en diccionario las respuesta del body
+        ## confierto estos datos en json = user_id,birth_date
         user_dict["user_id"]= str(user_dict["user_id"])
         user_dict["birth_date"] = str(user_dict["birth_date"])
+        
         result.append(user_dict)
-        f.seek(0)
+        f.seek(0) ## lo mueve al primer bit del archivo
         f.write(json.dumps(result))
         return user
     
