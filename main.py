@@ -1,11 +1,14 @@
 #Python
 from email import message
 import json
+
 from typing import Optional, List
+
+from uuid import UUID
 
 
 #fastApi
-from fastapi import (FastAPI,status, Body, Form)
+from fastapi import (FastAPI, HTTPException, Path,status, Body, Form)
 
 
 
@@ -84,8 +87,24 @@ def show_all_user():
     summary="show a Uses"  ,
     tags=["Users"]
 )
-def show_a_user():
-    pass
+def show_a_user(
+    user_id: UUID = Path(...)
+):
+    
+    with open ("users.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        # return result
+        id = str(user_id)
+
+    for d in results:
+        if d["user_id"] == id:
+            return d
+        
+    raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"¡This user_id doesn't exist!")
+        
+
 
 @app.delete(
     path="/users/{user_id}/delete",
@@ -94,8 +113,24 @@ def show_a_user():
     summary="Delete a Uses"  ,
     tags=["Users"]
 )
-def delete_a_user():
-    pass
+def delete_a_user(user_id: UUID = Path(...)
+):
+    with open ("users.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        # return result
+        id = str(user_id)
+
+    for d in results:
+        if d["user_id"] == id:
+            results.remove(d)
+            with open("users.json", "w", encoding="utf-8") as f:
+                f.seek(0)
+                f.write(json.dumps(results))
+            return d
+        
+    raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"¡This user_id doesn't exist!")
 
 @app.put(
     path="/users/{user_id}/update",

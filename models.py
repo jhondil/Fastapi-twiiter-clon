@@ -1,6 +1,6 @@
 #python
 from typing import Optional
-from uuid import UUID, uuid4
+from uuid import UUID
 from datetime import (date, datetime)
 
 #pydantic
@@ -10,7 +10,7 @@ from pydantic import (BaseModel, EmailStr, Field)
 #models User
 
 class UserBase(BaseModel):
-    user_id: UUID = Field(default_factory=uuid4)
+    user_id: UUID = Field()
     email: EmailStr  = Field(...)
 
 class User(UserBase):
