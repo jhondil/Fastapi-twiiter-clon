@@ -1,10 +1,13 @@
 #Python
+from email import message
 import json
 from typing import Optional, List
-from unittest import result
+
 
 #fastApi
-from fastapi import (FastAPI,status, Body)
+from fastapi import (FastAPI,status, Body, Form)
+
+
 
 #Models
 from models import *
@@ -38,14 +41,28 @@ def signup(user: UserRegister = Body(...)):
     
     
 @app.post(
-    path="/login",
-    response_model=User, ##responde al usuario
+    path="/LoginOut",
+    response_model=LoginOut, ##responde al usuario
     status_code=status.HTTP_200_OK,
     summary="Login a Uses"  ,
     tags=["Users"]
 )
-def login():
-    pass
+def login(email: EmailStr = Form(...), password: str = Form(...)):
+    with open("users.json", "r+", encoding="utf-8" ) as f:
+        result = json.loads(f.read())
+        
+        # print(result)
+        for user in result:
+            
+            
+            # print(user.values())
+            
+            if email in  user.values():
+                
+                return LoginOut(email=email, password=password, message="Login Successfully!")
+            else:
+                return LoginOut(email=email, password=password, message="Login Failed!")
+        f.seek(0)    ## lo mueve al primer bit del archivo
 
 @app.get(
     path="/users",

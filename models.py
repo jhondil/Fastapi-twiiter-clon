@@ -43,6 +43,15 @@ class UserRegister(User):
         max_length=25
     )  
 
+
+
+class LoginOut(BaseModel): 
+    email: EmailStr = Field(...)
+    password: str = Field(...)
+    message: str = Field(default="Login Successfully!")
+
+
+
 #models Tweets
 class Tweet(BaseModel):
     tweet_id : UUID = Field(...)
